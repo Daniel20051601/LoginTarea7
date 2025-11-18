@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -59,7 +60,12 @@ fun LoginBody(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(text = if (state.isRegistering) "Sign in" else "Log in") }
+                title = { Text(
+                    text = if (state.isRegistering && !state.isLoading) "Sign in" else if(!state.isRegistering && !state.isLoading) "Log in" else "",
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.titleLarge,
+                    ) }
             )
         },
         snackbarHost = { SnackbarHost(snackBarHostState) }
@@ -70,9 +76,10 @@ fun LoginBody(
                 .fillMaxSize()
         ) {
             if (state.isLoading) {
-                LinearWavyProgressIndicator(
+                CircularWavyProgressIndicator(
                     modifier = Modifier.align(Alignment.Center)
                 )
+
             } else {
                 val scroll = rememberScrollState()
                 Column(
